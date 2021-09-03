@@ -40,102 +40,60 @@
 
 #EndRegion Documentation
 
-[version]$ScriptVersion = "0.2.3.4"
-[uri]$ScriptURI = "https://raw.githubusercontent.com/FIN392/PowerShell/master/FileRename/FileRename.ps1"
-
-
-
-PowerShell/xAppName/xAppName.ps1
-
+[version]$ScriptVersion = "0.1.0.0"
+[uri]$ScriptURI = "https://raw.githubusercontent.com/FIN392/PSAppExample/main/bin/PSAppExample.ps1"
 
 #Region Functions
 
-function Get-URLScriptVersion {
-    [CmdletBinding(DefaultParameterSetName='URL')]
-    [OutputType([String])]
-    Param
-    (
-        [Parameter(Mandatory=$true, 
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true, 
-            ValueFromRemainingArguments=$false, 
-            Position=0,
-            ParameterSetName='URL')]
-        [ValidateNotNull()]
-        [ValidateNotNullOrEmpty()]
-        $URL
-    )
+function Update-PSApplication {
 
-    try {
-        $ScriptWeb=Invoke-WebRequest -Uri $URL -UseBasicParsing
-        ($ScriptWeb.Content -split "[`r`n]" |
-            Select-String -Pattern "(?i)^( |\t)*\[version\].*\x24ScriptVersion *= *(\x22|\x27)(\d)(\.\d){0,3}(\x22|\x27)").toString().Replace(" ","").Replace('"','').Replace("'","").Split("=")[1]
-    }
-    catch {
-        Write-Error $_
-    }
+    # Get version of script on web
+    $ScriptWeb=Invoke-WebRequest -Uri $ScriptURI.AbsoluteUri -UseBasicParsing
+    $WebScriptVersion = ($ScriptWeb.Content -split "[`r`n]" |
+        Select-String -Pattern "(?i)^( |\t)*\[version\].*\x24ScriptVersion *= *(\x22|\x27)(\d)(\.\d){0,3}(\x22|\x27)").toString().Replace(" ","").Replace('"','').Replace("'","").Split("=")[1]
+
+"Current Script Version : $ScriptVersion"
+"Web Script Version     : $WebScriptVersion"
+
+    # If newer...
+
+    if ( $WebScriptVersion -gt $ScriptVersion ) {
+
+        # Ask the user if they want to upgrade
+
+<#
+        Write-Host "Downloading..."
+        $TempFile = "$env:temp\$($URL | Split-Path  -leaf)"
+        Remove-Item -Path $TempFile -ErrorAction Ignore
+        try {
+            Invoke-WebRequest -Uri $URL -OutFile $TempFile
+        }
+        catch {
+            Write-Error $_
+        }
+    
+        Write-Host "Installing..."
+        try {
+            # Copy-Item -Path $TempFile -Destination $PSCommandPath -Force
+            Copy-Item -Path $TempFile -Destination E:\temp.ps1 -Force
+        }
+        catch {
+            Write-Error $_
+        }
+    
+        Write-Host "Installed"
+        exit
+#>
 
 }
 
-function Install-Script {
-    [CmdletBinding(DefaultParameterSetName='URL')]
-    [OutputType([String])]
-    Param
-    (
-        # Descripción de ayuda de Parám1
-        [Parameter(Mandatory=$true, 
-            ValueFromPipeline=$true,
-            ValueFromPipelineByPropertyName=$true, 
-            ValueFromRemainingArguments=$false, 
-            Position=0,
-            ParameterSetName='URL')]
-        [ValidateNotNull()]
-        [ValidateNotNullOrEmpty()]
-        $URL
-    )
-
-    Write-Host "Downloading..."
-    $TempFile = "$env:temp\$($URL | Split-Path  -leaf)"
-    Remove-Item -Path $TempFile -ErrorAction Ignore
-    try {
-        Invoke-WebRequest -Uri $URL -OutFile $TempFile
-    }
-    catch {
-        Write-Error $_
-    }
-
-    Write-Host "Installing..."
-    try {
-        # Copy-Item -Path $TempFile -Destination $PSCommandPath -Force
-        Copy-Item -Path $TempFile -Destination E:\temp.ps1 -Force
-    }
-    catch {
-        Write-Error $_
-    }
-
-    Write-Host "Installed"
-    exit
 
 }
 
 #EndRegion Functions
 
-#Region VersionCheck
+# Update the application
+Update-PSApplication
 
-# Get the version of the script in the web
-[version]$URLScriptVersion = Get-URLScriptVersion -URL $ScriptURI.AbsoluteUri
-
-Write-Host "Current version   : $ScriptVersion"
-Write-Host "Version in the web: $URLScriptVersion"
-
-# If newer then download and install
-if ( $URLScriptVersion -gt $ScriptVersion ) {
-
-    Install-Script -URL $ScriptURI.AbsoluteUri
-
-}
-
-
-
-#EndRegion VersionCheck
-
+# MAIN
+Write-Host 'Hello, world!'
