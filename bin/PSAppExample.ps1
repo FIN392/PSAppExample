@@ -40,26 +40,22 @@
 
 #EndRegion Documentation
 
-[version]$ScriptVersion = "0.1.0.0"
+[version]$ScriptVersion = "0.0.0.1"
 [uri]$ScriptURI = "https://raw.githubusercontent.com/FIN392/PSAppExample/main/bin/PSAppExample.ps1"
 
-#Region Functions
+#Region UpdateApplication
 
-function Update-PSApplication {
-
-    # Get version of script on web
+    # Get the version of script located in the web
     $ScriptWeb=Invoke-WebRequest -Uri $ScriptURI.AbsoluteUri -UseBasicParsing
     $WebScriptVersion = ($ScriptWeb.Content -split "[`r`n]" |
         Select-String -Pattern "(?i)^( |\t)*\[version\].*\x24ScriptVersion *= *(\x22|\x27)(\d)(\.\d){0,3}(\x22|\x27)").toString().Replace(" ","").Replace('"','').Replace("'","").Split("=")[1]
 
-"Current Script Version : $ScriptVersion"
-"Web Script Version     : $WebScriptVersion"
-
-    # If newer...
-
+    # If newer, ask the user if they want to upgrade
     if ( $WebScriptVersion -gt $ScriptVersion ) {
 
-        # Ask the user if they want to upgrade
+        "Current Script Version : $ScriptVersion"
+        "Web Script Version     : $WebScriptVersion"
+        "Actualizas?"
 
 <#
         Write-Host "Downloading..."
@@ -84,16 +80,8 @@ function Update-PSApplication {
         Write-Host "Installed"
         exit
 #>
+    }
 
-}
+#EndRegion UpdateApplication
 
-
-}
-
-#EndRegion Functions
-
-# Update the application
-Update-PSApplication
-
-# MAIN
 Write-Host 'Hello, world!'
