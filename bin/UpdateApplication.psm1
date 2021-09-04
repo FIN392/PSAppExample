@@ -23,8 +23,8 @@ function Get-ScriptWebVersion {
     }
 
 }
-Export-ModuleMember -Function Get-ScriptWebVersion
 
+# Upgrade script if a new version is available on the web
 function Update-ScriptFromWeb {
     [CmdletBinding()]
     [OutputType('System.IO.FileInfo')]
@@ -82,7 +82,7 @@ function Update-ScriptFromWeb {
     }
 
 }
-Export-ModuleMember -Function Update-ScriptFromWeb
+
 
 
 
