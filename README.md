@@ -18,7 +18,7 @@ La aplicación aparece en el menú, pinchar encima y elegir "Anclar a Inicio"
 
 ## PSAppExample.zip
 
-PSAppExample.lnk
+PSAppExample.lnk --> pwsh.exe -ExecutionPolicy Bypass -WindowStyle Hidden -File xxxxxx.ps1 
 bin\PSAppExample.ps1
 icon\PSAppExample.icon
 config\PSAppExample.config (XML)
