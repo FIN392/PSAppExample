@@ -40,14 +40,16 @@ function Update-ScriptFromWeb {
 
     PROCESS {
         # Get script version on the web
-        $WebVersion = Get-ScriptWebVersion -ScriptURL $ScriptURL
+        [version]$WebVersion = Get-ScriptWebVersion -ScriptURL $ScriptURL
 
         Write-Verbose "Current version: $CurrentVersion"
         Write-Verbose "Web version    : $WebVersion"
 
-###
-# ¿Qué hago con los literales?
-# (Get-UICulture).TwoLetterISOLanguageName
+### fuerzo para que se actualice
+[version]$WebVersion = "9.9.9.9"
+
+### ¿Qué hago con los literales para que los mensajes salgan en tu idioma?
+### (Get-UICulture).TwoLetterISOLanguageName
 
         # If the version on the web is newer...
         if ( $WebVersion -gt $CurrentVersion ) {
