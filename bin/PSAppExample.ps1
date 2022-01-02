@@ -36,8 +36,8 @@
         Author: FIN392 - fin392@gmail.com
 #>
 
-[version]$ScriptVersion = "0.0.0.1"
-[uri]$ScriptURL = "https://raw.githubusercontent.com/FIN392/PSAppExample/main/bin/PSAppExample.ps1"
+[version]$AppVersion = "0.0.0.1"
+[uri]$AppURL = "https://raw.githubusercontent.com/FIN392/PSAppExample/main/bin/PSAppExample.ps1"
 
 # Update the script if there is a newer version on the web
 Import-Module -Name '.\UpdateApplication.psm1' -Force
