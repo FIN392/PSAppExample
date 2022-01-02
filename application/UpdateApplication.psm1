@@ -1,10 +1,10 @@
 # Get the version of a script on the web
-# Look for the variable 'ScriptVersion' in the code to determine the version
+# Look for the variable 'AppVersion' in the code to determine the version
 function Get-ScriptWebVersion {
     [CmdletBinding()]
     [OutputType('version')]
     param (
-        [Parameter ( Mandatory=$true, Position=1 )][uri]$ScriptURL
+        [Parameter(Mandatory=$true)][uri]$ScriptURL
     )
 
     BEGIN {
@@ -15,7 +15,7 @@ function Get-ScriptWebVersion {
     PROCESS {
         $ScriptWeb=Invoke-WebRequest -Uri $ScriptURL.AbsoluteUri -UseBasicParsing
         [version]($ScriptWeb.Content -split "[`r`n]" |
-            Select-String -Pattern "(?i)^( |\t)*\[version\].*\x24ScriptVersion *= *(\x22|\x27)(\d)(\.\d){0,3}(\x22|\x27)").toString().Replace(" ","").Replace('"','').Replace("'","").Split("=")[1]
+            Select-String -Pattern "(?i)^( |\t)*\[version\].*\x24AppVersion *= *(\x22|\x27)(\d)(\.\d){0,3}(\x22|\x27)").toString().Replace(" ","").Replace('"','').Replace("'","").Split("=")[1]
         }
 
     END {
@@ -29,8 +29,8 @@ function Update-ScriptFromWeb {
     [CmdletBinding()]
     [OutputType('System.IO.FileInfo')]
     param (
-        [Parameter ( Mandatory=$true, Position=1 )][version]$CurrentVersion,
-        [Parameter ( Mandatory=$true, Position=2 )][uri]$ScriptURL
+        [Parameter(Mandatory=$true)][version]$CurrentVersion,
+        [Parameter(Mandatory=$true)][uri]$ScriptURL
     )
 
     BEGIN {
